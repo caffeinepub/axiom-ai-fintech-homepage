@@ -1,0 +1,500 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Font Faces ─────────────────────────────────────────────── */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque[opsz,wdth,wght].woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/assets/fonts/CabinetGrotesk[wght].woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/assets/fonts/Satoshi[wght].woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── OKLCH Design Tokens ─────────────────────────────────────── */
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Axiom AI brand palette — OKLCH raw L C H values */
+    /* Obsidian: #0D0D0D */
+    --obsidian: 0.08 0 0;
+    /* Emerald: #00C896 */
+    --emerald: 0.72 0.18 167;
+    /* Ivory: #F5F0E8 */
+    --ivory: 0.95 0.015 85;
+    /* Charcoal: #1A1A2E */
+    --charcoal: 0.13 0.02 265;
+    /* Amber: #FFB347 */
+    --amber: 0.82 0.16 68;
+    /* Gold: #D4AF37 */
+    --gold: 0.76 0.14 80;
+    /* Risk colors */
+    --risk-conservative: 0.78 0.14 185;
+    --risk-moderate: 0.82 0.16 68;
+    --risk-aggressive: 0.65 0.22 25;
+
+    /* Semantic tokens — always dark */
+    --background: 0.08 0 0;
+    --foreground: 0.98 0 0;
+    --card: 0.12 0.005 265;
+    --card-foreground: 0.98 0 0;
+    --popover: 0.12 0.005 265;
+    --popover-foreground: 0.98 0 0;
+    --primary: 0.72 0.18 167;
+    --primary-foreground: 0.08 0 0;
+    --secondary: 0.18 0.01 265;
+    --secondary-foreground: 0.85 0 0;
+    --muted: 0.16 0.01 265;
+    --muted-foreground: 0.62 0 0;
+    --accent: 0.76 0.14 80;
+    --accent-foreground: 0.08 0 0;
+    --destructive: 0.65 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 1 0 0 / 10%;
+    --input: 1 0 0 / 12%;
+    --ring: 0.72 0.18 167;
+
+    --chart-1: 0.72 0.18 167;
+    --chart-2: 0.76 0.14 80;
+    --chart-3: 0.82 0.16 68;
+    --chart-4: 0.78 0.14 185;
+    --chart-5: 0.65 0.22 25;
+
+    --sidebar: 0.10 0.005 265;
+    --sidebar-foreground: 0.98 0 0;
+    --sidebar-primary: 0.72 0.18 167;
+    --sidebar-primary-foreground: 0.08 0 0;
+    --sidebar-accent: 0.18 0.01 265;
+    --sidebar-accent-foreground: 0.85 0 0;
+    --sidebar-border: 1 0 0 / 10%;
+    --sidebar-ring: 0.72 0.18 167;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0d0d0d;
+    color: #ffffff;
+    font-family: "Satoshi", "Cabinet Grotesk", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+/* ─── Utility Classes ─────────────────────────────────────────── */
+@layer components {
+  /* Glassmorphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 200, 150, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(0, 200, 150, 0.1);
+  }
+
+  /* Primary button */
+  .btn-primary {
+    background-color: #00c896;
+    color: #000000;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 24px rgba(0, 200, 150, 0.5),
+      0 4px 16px rgba(0, 200, 150, 0.3);
+    background-color: #00daa8;
+    transform: translateY(-1px);
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid #00c896;
+    color: #00c896;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(0, 200, 150, 0.08);
+    box-shadow: 0 0 20px rgba(0, 200, 150, 0.25);
+    transform: translateY(-1px);
+  }
+
+  /* Section heading */
+  .section-headline {
+    font-family: "Bricolage Grotesque", "Cabinet Grotesk", system-ui,
+      sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+
+  /* Emerald glow panel */
+  .emerald-glow {
+    box-shadow: 0 0 80px rgba(0, 200, 150, 0.1) inset,
+      0 0 40px rgba(0, 200, 150, 0.06);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #00c896 0%, #d4af37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Step connector line */
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 200, 150, 0.8),
+      rgba(0, 200, 150, 0.15)
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  .step-connector::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #00c896, transparent);
+    animation: connector-pulse 2.5s linear infinite;
+  }
+}
+
+/* ─── Scroll Reveal ──────────────────────────────────────────── */
+@layer utilities {
+  .fade-in-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .fade-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .stagger-1 {
+    transition-delay: 0.1s;
+  }
+  .stagger-2 {
+    transition-delay: 0.2s;
+  }
+  .stagger-3 {
+    transition-delay: 0.3s;
+  }
+  .stagger-4 {
+    transition-delay: 0.4s;
+  }
+}
+
+/* ─── Keyframe Animations ────────────────────────────────────── */
+@keyframes connector-pulse {
+  0% {
+    left: -60%;
+  }
+  100% {
+    left: 110%;
+  }
+}
+
+@keyframes connector-pulse-v {
+  0% {
+    top: -60%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 200, 150, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 200, 150, 0.45);
+  }
+}
+
+@keyframes risk-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pipeline-dot {
+  0% {
+    left: -5%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 105%;
+    opacity: 0;
+  }
+}
+
+@keyframes counter-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* ─── Risk toggle button styles ─────────────────────────────── */
+.risk-toggle-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.risk-toggle-btn:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.risk-toggle-btn.active-conservative {
+  background: rgba(45, 212, 191, 0.12);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  box-shadow: 0 0 18px rgba(45, 212, 191, 0.25);
+}
+
+.risk-toggle-btn.active-moderate {
+  background: rgba(255, 179, 71, 0.12);
+  border-color: #ffb347;
+  color: #ffb347;
+  box-shadow: 0 0 18px rgba(255, 179, 71, 0.25);
+}
+
+.risk-toggle-btn.active-aggressive {
+  background: rgba(255, 107, 107, 0.12);
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  box-shadow: 0 0 18px rgba(255, 107, 107, 0.25);
+}
+
+.risk-card-animate {
+  animation: risk-card-in 0.38s ease forwards;
+}
+
+/* ─── Chart animation ────────────────────────────────────────── */
+.chart-line {
+  stroke-dasharray: 1300;
+  stroke-dashoffset: 1300;
+  transition: stroke-dashoffset 2.2s ease-in-out;
+}
+
+.chart-line-delayed {
+  stroke-dasharray: 1300;
+  stroke-dashoffset: 1300;
+  transition: stroke-dashoffset 2.4s ease-in-out 0.4s;
+}
+
+.chart-animated .chart-line,
+.chart-animated .chart-line-delayed {
+  stroke-dashoffset: 0;
+}
+
+/* ─── Pipeline animation ─────────────────────────────────────── */
+.pipeline-arrow {
+  position: relative;
+  overflow: hidden;
+}
+
+.pipeline-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00c896;
+  box-shadow: 0 0 10px rgba(0, 200, 150, 0.8);
+  animation: pipeline-dot 2s ease-in-out infinite;
+}
+
+/* ─── Footer link ────────────────────────────────────────────── */
+.footer-link {
+  color: #5a5a5a;
+}
+.footer-link:hover {
+  color: #00c896;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 200, 150, 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 200, 150, 0.45);
+}
+
+/* ─── SIP form input ─────────────────────────────────────────── */
+.sip-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: "Satoshi", "Cabinet Grotesk", sans-serif;
+}
+
+.sip-input:focus {
+  border-color: rgba(0, 200, 150, 0.5);
+  box-shadow: 0 0 16px rgba(0, 200, 150, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sip-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.sip-input::-webkit-outer-spin-button,
+.sip-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.sip-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ─── Print styles ───────────────────────────────────────────── */
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+}
