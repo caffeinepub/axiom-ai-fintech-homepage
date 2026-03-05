@@ -1,10 +1,10 @@
 import Map "mo:core/Map";
-import Text "mo:core/Text";
 import Nat "mo:core/Nat";
+import Text "mo:core/Text";
 import List "mo:core/List";
 import Array "mo:core/Array";
-
 import Runtime "mo:core/Runtime";
+
 
 
 actor {
@@ -53,13 +53,13 @@ actor {
 
   // Stable state
   var sessionIdCounter = 0;
+  var reportCount = 0;
   let emailSignups = Map.empty<Text, ()>();
   let sipSubmissions = Map.empty<Text, SIPSubmission>();
   let riskProfiles = Map.empty<Text, RiskProfile>();
   let fundRecommendations = Map.empty<Text, [FundRecommendation]>();
   let projections = Map.empty<Text, SIPProjection>();
   let sessions = Map.empty<Nat, SIPSession>();
-  var reportCount = 0;
 
   // Submit SIP details and store them
   public shared ({ caller }) func submitSIPDetails(name : Text, monthlyAmount : Nat, goalAmount : Nat, yearlyInvestmentAmount : Nat, tenureYears : Nat, existingCorpus : Nat) : async (Nat, Text, Nat, Nat, Nat, Nat, Nat) {
@@ -127,6 +127,14 @@ actor {
             riskScore = 3;
             riskLevel = "Low";
           },
+          {
+            fundName = "Nippon India Hybrid Bond Fund";
+            category = "Hybrid";
+            cagr = 10;
+            sharpeRatio = 7;
+            riskScore = 2;
+            riskLevel = "Low";
+          },
         ];
       };
       case ("Moderate") {
@@ -144,6 +152,22 @@ actor {
             category = "Focused";
             cagr = 17;
             sharpeRatio = 14;
+            riskScore = 6;
+            riskLevel = "Medium";
+          },
+          {
+            fundName = "HDFC Balanced Advantage Fund";
+            category = "Balanced";
+            cagr = 14;
+            sharpeRatio = 10;
+            riskScore = 5;
+            riskLevel = "Medium";
+          },
+          {
+            fundName = "Mirae Asset Large Cap Fund";
+            category = "Large Cap";
+            cagr = 16;
+            sharpeRatio = 13;
             riskScore = 6;
             riskLevel = "Medium";
           },
@@ -175,30 +199,30 @@ actor {
     recommendations;
   };
 
-  // Calculate SIP projection
-  public shared ({ caller }) func calculateSIPProjection(_name : Text, monthlyAmount : Nat, tenureYears : Nat, expectedReturnRate : Nat) : async SIPProjection {
+  // Calculate SIP projection using correct formula
+  public shared ({ caller }) func calculateSIPProjection(name : Text, monthlyAmount : Nat, tenureYears : Nat, expectedReturnRate : Nat) : async SIPProjection {
     let totalMonths = tenureYears * 12;
-    let totalInvested = monthlyAmount * tenureYears;
+    let totalInvested = monthlyAmount * 12 * tenureYears;
     var corpus : Nat = 0;
     var i = 0;
+
     while (i < totalMonths) {
-      corpus += monthlyAmount;
+      corpus := corpus + monthlyAmount;
       // Apply monthly compounding
-      corpus *= (100 + expectedReturnRate);
-      corpus /= 1200;
+      corpus := corpus * (12000 + expectedReturnRate) / 12000;
       i += 1;
     };
 
-    let wealthGain = corpus - totalInvested : Nat;
+    let gain = if (corpus > totalInvested) { corpus - totalInvested } else { 0 : Nat };
 
     let projection : SIPProjection = {
       totalInvested;
       projectedCorpus = corpus;
-      wealthGain;
+      wealthGain = gain;
       projectedReturnRate = expectedReturnRate;
     };
 
-    projections.add(_name, projection);
+    projections.add(name, projection);
     projection;
   };
 

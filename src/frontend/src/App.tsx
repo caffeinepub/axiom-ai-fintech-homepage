@@ -17,11 +17,13 @@ import {
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import type { FundRecommendation } from "./backend.d";
+import AnimatedBackground from "./components/AnimatedBackground";
 import FundRecommendationsPage from "./pages/FundRecommendationsPage";
 import ProjectionPage from "./pages/ProjectionPage";
 import ReportPage from "./pages/ReportPage";
 import RiskProfilePage from "./pages/RiskProfilePage";
 import SIPAnalysisPage from "./pages/SIPAnalysisPage";
+import SavedReportsPage from "./pages/SavedReportsPage";
 
 /* ─── Shared Session Context ───────────────────────────────────── */
 export interface SessionState {
@@ -75,11 +77,14 @@ function TabNav({ activePath }: { activePath: string }) {
     { label: "Risk Profile", to: "/risk-profile" },
     { label: "Fund Analysis", to: "/fund-recommendations" },
     { label: "Recommendations", to: "/projection" },
+    { label: "Saved Reports", to: "/saved-reports" },
   ];
   return (
     <nav
       style={{
-        background: "#0a0e14",
+        background: "rgba(10,14,20,0.85)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid rgba(255,255,255,0.07)",
       }}
       className="flex items-center gap-0 px-6 h-12 sticky top-0 z-50"
@@ -204,7 +209,7 @@ function HomePage() {
     <div
       className="flex flex-col"
       style={{
-        background: "#0f1117",
+        background: "transparent",
         color: "#ffffff",
         minHeight: "calc(100vh - 48px)",
       }}
@@ -214,8 +219,10 @@ function HomePage() {
         <div
           className="relative rounded-xl p-6 mb-4 overflow-hidden"
           style={{
-            background: "#141920",
+            background: "rgba(20,25,32,0.85)",
             border: "1px solid rgba(255,255,255,0.08)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
           }}
           data-ocid="hero.card"
         >
@@ -272,8 +279,10 @@ function HomePage() {
               key={stat.label}
               className="rounded-xl p-4"
               style={{
-                background: "#141920",
+                background: "rgba(20,25,32,0.80)",
                 border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
               }}
               data-ocid={`stats.card.${i + 1}`}
             >
@@ -317,8 +326,10 @@ function HomePage() {
                   onClick={() => router.navigate({ to: step.route })}
                   className="rounded-xl p-4 flex flex-col cursor-pointer transition-all hover:translate-y-[-1px] text-left"
                   style={{
-                    background: "#141920",
+                    background: "rgba(20,25,32,0.80)",
                     border: "1px solid rgba(255,255,255,0.08)",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
                   }}
                   data-ocid={`pipeline.card.${i + 1}`}
                 >
@@ -385,7 +396,7 @@ function PageWrapper({
   activePath: string;
 }) {
   return (
-    <div style={{ background: "#0f1117", minHeight: "100vh" }}>
+    <div style={{ background: "transparent", minHeight: "100vh" }}>
       <TabNav activePath={activePath} />
       {children}
     </div>
@@ -396,16 +407,28 @@ function PageWrapper({
 function RootLayout() {
   return (
     <SessionProvider>
-      <Toaster
-        toastOptions={{
-          style: {
-            background: "#1a1a2e",
-            border: "1px solid rgba(0,200,150,0.2)",
-            color: "#ffffff",
-          },
+      <div
+        style={{
+          position: "relative",
+          minHeight: "100vh",
+          background: "#0a0e14",
         }}
-      />
-      <Outlet />
+      >
+        <AnimatedBackground />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <Toaster
+            toastOptions={{
+              style: {
+                background: "rgba(26,26,46,0.95)",
+                border: "1px solid rgba(0,200,150,0.2)",
+                color: "#ffffff",
+                backdropFilter: "blur(12px)",
+              },
+            }}
+          />
+          <Outlet />
+        </div>
+      </div>
     </SessionProvider>
   );
 }
@@ -474,6 +497,16 @@ const reportRoute = createRoute({
   ),
 });
 
+const savedReportsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/saved-reports",
+  component: () => (
+    <PageWrapper activePath="/saved-reports">
+      <SavedReportsPage />
+    </PageWrapper>
+  ),
+});
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   sipRoute,
@@ -481,6 +514,7 @@ const routeTree = rootRoute.addChildren([
   fundsRoute,
   projectionRoute,
   reportRoute,
+  savedReportsRoute,
 ]);
 
 export const router = createRouter({ routeTree });

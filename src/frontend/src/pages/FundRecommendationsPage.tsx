@@ -235,8 +235,8 @@ export default function FundRecommendationsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {sortedFunds.map((fund, i) => {
-                const cagr = Number(fund.cagr) / 10;
-                const sharpe = Number(fund.sharpeRatio) / 100;
+                const cagr = Number(fund.cagr);
+                const sharpe = Number(fund.sharpeRatio) / 10;
                 const riskScore = Number(fund.riskScore);
                 const isSelected = selected.has(i);
                 const badge = getRiskBadge(fund.riskLevel);

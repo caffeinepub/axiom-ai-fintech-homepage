@@ -5,9 +5,11 @@ import {
   Home,
   Printer,
   RefreshCw,
+  Save,
   Shield,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { toast } from "sonner";
 import { useSession } from "../App";
 import type { FundRecommendation } from "../backend.d";
 import PageLayout from "../components/PageLayout";
@@ -47,9 +49,7 @@ function generateRecommendation(state: LocationState): string {
   const funds = state.selectedFunds || [];
 
   const topFund = funds[0]?.fundName || "diversified mutual funds";
-  const cagr = funds[0]
-    ? (Number(funds[0].cagr) / 10).toFixed(1)
-    : rate.toString();
+  const cagr = funds[0] ? Number(funds[0].cagr).toFixed(1) : rate.toString();
 
   return `Based on our comprehensive AI analysis, ${name} is classified as a ${profile} investor with a risk score of ${state.riskProfile?.score || 5}/10. With a monthly SIP of ₹${monthly.toLocaleString("en-IN")} over ${tenure} years, the projected corpus is ${formatCrore(corpus)} at an expected CAGR of ${rate}% per annum. We recommend a ${profile.toLowerCase()}-oriented portfolio led by ${topFund} (CAGR: ${cagr}%), which aligns with the investor's goals. The selected funds have been filtered using AI-driven analysis of 10,000+ data points, optimized for the ${profile.toLowerCase()} risk appetite. Regular SIP discipline combined with periodic rebalancing is advised for optimal long-term performance.`;
 }
@@ -82,6 +82,27 @@ export default function ReportPage() {
     month: "long",
     year: "numeric",
   });
+
+  function saveReport() {
+    if (!state?.name) {
+      toast.error("No active report to save");
+      return;
+    }
+    try {
+      const existing = localStorage.getItem("vvspl_saved_reports");
+      const reports = existing ? JSON.parse(existing) : [];
+      const entry = {
+        id: Date.now().toString(),
+        savedAt: new Date().toISOString(),
+        ...session,
+      };
+      reports.push(entry);
+      localStorage.setItem("vvspl_saved_reports", JSON.stringify(reports));
+      toast.success("Report saved successfully!");
+    } catch {
+      toast.error("Failed to save report. Please try again.");
+    }
+  }
 
   return (
     <PageLayout activeStep={5} backTo="/projection" backLabel="Projections">
@@ -272,13 +293,13 @@ export default function ReportPage() {
                         className="py-3 pr-3 text-sm font-bold"
                         style={{ color: "#00c896" }}
                       >
-                        {(Number(fund.cagr) / 10).toFixed(1)}%
+                        {Number(fund.cagr).toFixed(1)}%
                       </td>
                       <td
                         className="py-3 pr-3 text-sm font-bold"
                         style={{ color: "#d4af37" }}
                       >
-                        {(Number(fund.sharpeRatio) / 100).toFixed(2)}
+                        {(Number(fund.sharpeRatio) / 10).toFixed(2)}
                       </td>
                       <td className="py-3 text-xs" style={{ color: "#888" }}>
                         {fund.riskLevel}
@@ -406,6 +427,21 @@ export default function ReportPage() {
           >
             <Printer className="w-4 h-4" />
             Print Report
+          </button>
+
+          <button
+            type="button"
+            data-ocid="report.save_button"
+            onClick={saveReport}
+            className="flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg transition-all hover:opacity-90 active:scale-95"
+            style={{
+              background: "rgba(0,200,150,0.12)",
+              border: "1px solid rgba(0,200,150,0.3)",
+              color: "#00c896",
+            }}
+          >
+            <Save className="w-4 h-4" />
+            Save Report
           </button>
 
           <button

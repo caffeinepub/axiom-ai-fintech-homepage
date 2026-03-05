@@ -77,7 +77,7 @@ const QUESTIONS: Question[] = [
 ];
 
 function getRiskInfo(score: number) {
-  if (score <= 4)
+  if (score <= 3)
     return {
       type: "Conservative",
       color: "#2dd4bf",
@@ -89,7 +89,7 @@ function getRiskInfo(score: number) {
       icon: Shield,
       expectedReturn: "7–9% p.a.",
     };
-  if (score <= 7)
+  if (score <= 6)
     return {
       type: "Moderate",
       color: "#f59e0b",
@@ -418,18 +418,18 @@ export default function RiskProfilePage() {
                   {[
                     {
                       label: "Conservative",
-                      range: "1–4",
-                      active: result.score <= 4,
+                      range: "1–3",
+                      active: result.score <= 3,
                     },
                     {
                       label: "Moderate",
-                      range: "5–7",
-                      active: result.score >= 5 && result.score <= 7,
+                      range: "4–6",
+                      active: result.score >= 4 && result.score <= 6,
                     },
                     {
                       label: "Aggressive",
-                      range: "8–10",
-                      active: result.score >= 8,
+                      range: "7–10",
+                      active: result.score >= 7,
                     },
                   ].map((tier) => (
                     <div key={tier.label} className="flex items-center gap-3">

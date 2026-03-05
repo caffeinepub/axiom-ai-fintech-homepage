@@ -41,7 +41,7 @@ export interface SIPProjection {
     projectedCorpus: bigint;
 }
 export interface backendInterface {
-    calculateSIPProjection(_name: string, monthlyAmount: bigint, tenureYears: bigint, expectedReturnRate: bigint): Promise<SIPProjection>;
+    calculateSIPProjection(name: string, monthlyAmount: bigint, tenureYears: bigint, expectedReturnRate: bigint): Promise<SIPProjection>;
     getFundRecommendations(profileType: string): Promise<Array<FundRecommendation>>;
     getRegisteredEmailCount(): Promise<bigint>;
     getReportDataByName(name: string): Promise<{
